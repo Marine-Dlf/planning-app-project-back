@@ -1,8 +1,8 @@
-const express = require("express")      // Import du paquet express
+const express = require("express")                  // Import du paquet express
 const port = process.env.PORT || 5000
-const sequelize = require('./config/database'); // Ajustez le chemin selon votre structure de dossiers
+const sequelize = require('./config/database');     // Etablit une connexion à la BDD via l'ORM Sequelize
 
-const app = express()       // Ici appel de la fonction express pour démarrer notre serveur: création d'une application
+const app = express()                               // Ici appel de la fonction express pour démarrer notre serveur: création d'une application
 
 // Création de routes
 app.get("/", (req, res) =>{
@@ -22,10 +22,11 @@ app.get("/json", (req, res) => {
     })
 })
 
+// Définit une route HTTP GET pour /databasetest
 app.get("/databasetest", async(req, res) => {
     console.log("Testing database connection...");
     try {
-        await sequelize.authenticate();
+        await sequelize.authenticate();      // Tente d'établir une connexion avec la base de données. Cela renvoie une promesse qui sera résolue si la connexion est réussie
         res.status(200).send("Connection has been established successfully.");
     } catch (error) {
         console.error('Unable to connect to the database:', error);
