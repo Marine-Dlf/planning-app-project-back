@@ -1,0 +1,22 @@
+# Node module
+node_modules/
+
+# Config (car risque d'informations sensibles
+config/database.js
+
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environnement
+.env
+
+# Build
+dist/
+build/
+
+# Fichiers temporaires
+.DS_Store
+*.tgz
