@@ -57,7 +57,7 @@ app.get("/users", async(req, res) => {
         const users = await User.findAll();
         res.status(200).json(users);
     } catch (error) {
-        console.error('Erreur lors de la récupération des événements:', error);
+        console.error('Erreur lors de la récupération des users:', error);
     res.status(500).send('Erreur serveur');
     }
 })
@@ -70,7 +70,19 @@ app.get("/events/:id", async(req, res) => {
         const event = await Event.findByPk(id);
         res.status(200).json(event);
     } catch (error) {
-        console.error('Erreur lors de la récupération des événements:', error);
+        console.error("Erreur lors de la récupération de l'événement:", error);
+        res.status(500).send('Erreur serveur');
+    }
+})
+
+// Récupération et affichage d'un seul user en fonction de son id
+app.get("/users/:id", async(req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await User.findByPk(id);
+        res.status(200).json(user)
+    } catch (error) {
+        console.error('Erreur lors de la récupération du user:', error);
         res.status(500).send('Erreur serveur');
     }
 })
