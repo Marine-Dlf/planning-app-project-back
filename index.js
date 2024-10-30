@@ -36,7 +36,7 @@ app.get("/databasetest", async(req, res) => {
 })
 
 
-// Affichage des données de ma BDD (table events)
+// Récupération et affichage des données de la table "events" de ma BDD
 app.get("/events", async(req, res) => {
     try {
         const events = await Event.findAll();       // Récupère tous les évènements
@@ -46,6 +46,18 @@ app.get("/events", async(req, res) => {
     res.status(500).send('Erreur serveur');
     }
 });
+
+// Récupération et affichage d'un seul event en fonction de son id
+app.get("/events/:id", async(req, res) => {
+    try {
+        const id = req.params.id
+        const event = await Event.findByPk(id);
+        res.status(200).json(event);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements:', error);
+        res.status(500).send('Erreur serveur');
+    }
+})
 
 
 // Démarrage du serveur et écoute d'un port donné
