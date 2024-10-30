@@ -1,23 +1,21 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('../config/database')
 
-const Event = sequelize.define('Event', {
-    name: {
+const User = sequelize.define('User', {
+    pseudo: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    date: {
-        type: DataTypes.DATE,
+    email: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
-    schedules: {
-        type: DataTypes.TIME,
-    },
-    comment: {
+    password: {
         type: DataTypes.STRING,
+        allowNull: false,
     },
 }, {
-    timestamps: false,
+    timestamps: false,      // Ca ne fonctionne pas si je ne mets pas ça
 });
 
-module.exports = Event;
+module.exports = User;

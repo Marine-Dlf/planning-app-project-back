@@ -2,8 +2,12 @@ const express = require("express")                  // Import du paquet express
 const port = process.env.PORT || 5000
 const sequelize = require('./config/database');     // Etablit une connexion à la BDD via l'ORM Sequelize
 const Event = require('./models/event.js')
+const User = require('./models/user.js')
 
 const app = express()                               // Ici appel de la fonction express pour démarrer notre serveur: création d'une application
+
+// Middleware pour lire les requêtes json
+app.use(express.json())
 
 // Création de routes
 app.get("/", (req, res) =>{
@@ -47,6 +51,18 @@ app.get("/events", async(req, res) => {
     }
 });
 
+// Récupération et affichage des données de la table "users" de ma BDD
+app.get("/users", async(req, res) => {
+    try {
+        const users = await User.findAll();
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements:', error);
+    res.status(500).send('Erreur serveur');
+    }
+})
+
+
 // Récupération et affichage d'un seul event en fonction de son id
 app.get("/events/:id", async(req, res) => {
     try {
@@ -58,6 +74,7 @@ app.get("/events/:id", async(req, res) => {
         res.status(500).send('Erreur serveur');
     }
 })
+
 
 
 // Démarrage du serveur et écoute d'un port donné
