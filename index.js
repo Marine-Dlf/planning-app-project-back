@@ -88,8 +88,34 @@ app.get("/users/:id", async(req, res) => {
 })
 
 
+// Création d'une route pour AJOUTER (création) des nouveaux évènements: méthode POST
+app.post('/events', async(req, res) => {
+    try {
+        const { name, date, schedules, comment } = req.body;   // Données envoyées dans le corps de la requête
+        const newEvent = await Event.create({ name, date, schedules, comment })
+        res.status(201).json(newEvent)
+    } catch (error) {
+        console.error("Erreur de création :", error);
+        res.status(500).send("Erreur serveur");
+    }
+})
+
+// Création d'une route pour AJOUTER (création) des nouveaux utilisateurs: méthode POST
+app.post('/users', async(req,res) => {
+    try {
+        const newUser = await User.create(req.body);
+        res.status(201).json(newUser)
+    } catch (error) {
+        console.error("Erreur de création :", error);
+        res.status(500).send("Erreur serveur");
+    }
+})
 
 // Démarrage du serveur et écoute d'un port donné
 app.listen(port, () => {
     console.log(`Serveur en ligne ! A l'adresse: http://localhost:${port}`)
+    // sequelize.sync({ alter: true })
+    // .then(() => console.log("Toutes les tables sont synchronisées"))
+    // .catch((error) => console.error("Erreur de synchronisation:", error));
+
 })
