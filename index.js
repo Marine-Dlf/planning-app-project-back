@@ -153,10 +153,25 @@ app.delete("/events/:id", async(req, res) => {
         const event = await Event.findByPk(req.params.id);              // Recherche l'événement par ID
         if (event) {
             await Event.destroy({ where :{id: req.params.id}})          // Supprime l'événement dont l'ID correspond à req.params.id (si trouvé)
-
             res.status(200).send('Evènement supprimé avec succés')
         } else {
             res.status(404).send('Evènement non trouvé')
+        }
+    } catch (error) {
+        console.error("Erreur de suppression :", error);
+        res.status(500).send("Erreur serveur");
+    }
+});
+
+// Création d'une route pour SUPPRIMER un utilisateur: méthode DELETE
+app.delete("/users/:id", async(req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id);
+        if (user) {
+            await User.destroy({ where :{id: req.params.id}});
+            res.status(200).send('Utilisateur supprimé avec succés');
+        } else {
+            res.status(404).send('Utilisateur non trouvé');
         }
     } catch (error) {
         console.error("Erreur de suppression :", error);
