@@ -129,6 +129,23 @@ app.put('/events/:id', async(req, res) => {
     }
 })
 
+// Création d'une route pour METTRE A JOUR (modifier) un user: méthode PUT
+app.put("/users/:id", async(req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id);
+        if (user) {
+            let condition = { where :{id: req.params.id}}
+            await User.update(req.body, condition)
+            res.status(200).json(user);
+        } else {
+            res.status(404).send('Utilisateur non trouvé');
+        }
+    } catch (error) {
+        console.error("Erreur de mise à jour :", error);
+        res.status(500).send("Erreur serveur");
+    }
+})
+
 
 // Démarrage du serveur et écoute d'un port donné
 app.listen(port, () => {
