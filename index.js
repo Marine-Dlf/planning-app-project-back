@@ -147,6 +147,24 @@ app.put("/users/:id", async(req, res) => {
 })
 
 
+// Création d'une route pour SUPPRIMER un évènement: méthode DELETE
+app.delete("/events/:id", async(req, res) => {
+    try {
+        const event = await Event.findByPk(req.params.id);              // Recherche l'événement par ID
+        if (event) {
+            await Event.destroy({ where :{id: req.params.id}})          // Supprime l'événement dont l'ID correspond à req.params.id (si trouvé)
+
+            res.status(200).send('Evènement supprimé avec succés')
+        } else {
+            res.status(404).send('Evènement non trouvé')
+        }
+    } catch (error) {
+        console.error("Erreur de suppression :", error);
+        res.status(500).send("Erreur serveur");
+    }
+});
+
+
 // Démarrage du serveur et écoute d'un port donné
 app.listen(port, () => {
     console.log(`Serveur en ligne ! A l'adresse: http://localhost:${port}`)
