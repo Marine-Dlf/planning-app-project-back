@@ -111,11 +111,30 @@ app.post('/users', async(req,res) => {
     }
 })
 
+
+// Création d'une route pour METTRE A JOUR (modifier) un évènement: méthode PUT (met tout à jour) - méthode patch (ne met à jour que certains champs)
+app.put('/events/:id', async(req, res) => {
+    try {
+        const event = await Event.findByPk(req.params.id);      // Trouve l'évènement par son id
+        if (event) {
+            let condition = { where :{id: req.params.id} };     // where précise à Sequelize les entrées de la table events à mettre à jour (ici, seule l'entrée dont l'id correspond (req.params.id) sera mise à jour)
+            await Event.update(req.body, condition);            // Mise à jour des données
+            res.status(200).json(event);
+        } else {
+            res.status(404).send('Evènement non trouvé');
+        }
+    } catch (error) {
+        console.error("Erreur de mise à jour :", error);
+        res.status(500).send("Erreur serveur");
+    }
+})
+
+
 // Démarrage du serveur et écoute d'un port donné
 app.listen(port, () => {
     console.log(`Serveur en ligne ! A l'adresse: http://localhost:${port}`)
-    // sequelize.sync({ alter: true })
-    // .then(() => console.log("Toutes les tables sont synchronisées"))
-    // .catch((error) => console.error("Erreur de synchronisation:", error));
+    sequelize.sync({ alter: true })
+    .then(() => console.log("Toutes les tables sont synchronisées"))
+    .catch((error) => console.error("Erreur de synchronisation:", error));
 
 })
