@@ -3,11 +3,14 @@ const port = process.env.PORT || 5000
 const sequelize = require('./config/database');     // Establishes a connection to the BDD via the Sequelize ORM
 const Event = require('./models/event.js')
 const User = require('./models/user.js')
+const cors = require('cors');
 
 const app = express()                               // Call the express function to start our server: creating an application
 
 // Middleware to read json requests
 app.use(express.json())
+
+app.use(cors());
 
 // Creating roads
 app.get("/", (req, res) =>{
@@ -47,7 +50,7 @@ app.get("/events", async(req, res) => {
         res.status(200).json(events);               // Returns events in json
     } catch (error) {
         console.error('Erreur lors de la récupération des événements:', error);
-    res.status(500).send('Erreur serveur');
+        res.status(500).json({ error: 'Erreur serveur' });
     }
 });
 
@@ -58,7 +61,7 @@ app.get("/users", async(req, res) => {
         res.status(200).json(users);
     } catch (error) {
         console.error('Erreur lors de la récupération des users:', error);
-    res.status(500).send('Erreur serveur');
+        res.status(500).send('Erreur serveur');
     }
 })
 
