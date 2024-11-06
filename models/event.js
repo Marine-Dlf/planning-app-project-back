@@ -10,6 +10,9 @@ const Event = sequelize.define('Event', {
         type: DataTypes.DATE,
         allowNull: false,
     },
+    location: {
+        type: DataTypes.STRING,
+    },
     schedules: {
         type: DataTypes.TIME,
     },
