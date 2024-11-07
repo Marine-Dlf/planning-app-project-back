@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize')
 const sequelize = require('../config/database')
 
 const Event = sequelize.define('Event', {
-    name: {
+    eventName: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -13,7 +13,7 @@ const Event = sequelize.define('Event', {
     location: {
         type: DataTypes.STRING,
     },
-    schedules: {
+    time: {
         type: DataTypes.TIME,
     },
     comment: {

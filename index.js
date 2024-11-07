@@ -91,17 +91,31 @@ app.get("/users/:id", async(req, res) => {
 })
 
 
-// Creating a route to add (CREATE) new events: POST method
+// // Creating a route to add (CREATE) new events: POST method
+// app.post('/events', async(req, res) => {
+//     try {
+//         const { eventName, date, time, location, comment } = req.body;                    // Data sent in the body of the request
+//         const newEvent = await Event.create({ eventName, date, time, location, comment })
+//         res.status(201).json(newEvent)
+//     } catch (error) {
+//         console.error("Erreur de création :", error);
+//         res.status(500).send("Erreur serveur");
+//     }
+// })
+
+
 app.post('/events', async(req, res) => {
+    const { eventName, date, time, location, comment } = req.body
     try {
-        const { name, date, schedules, comment } = req.body;                    // Data sent in the body of the request
-        const newEvent = await Event.create({ name, date, schedules, comment })
+        const newEvent = await Event.create({ eventName, date, time, location, comment })
         res.status(201).json(newEvent)
     } catch (error) {
         console.error("Erreur de création :", error);
-        res.status(500).send("Erreur serveur");
+        res.status(500).send("Erreur serveur"); 
     }
 })
+
+
 
 // Creating a route to add (CREATE) new users: POST method
 app.post('/users', async(req,res) => {
