@@ -15,6 +15,7 @@ const Event = sequelize.define('Event', {
     },
     time: {
         type: DataTypes.TIME,
+        allowNull: true,
     },
     comment: {
         type: DataTypes.STRING,
