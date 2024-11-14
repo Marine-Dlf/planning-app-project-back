@@ -94,6 +94,12 @@ app.get("/users/:id", async(req, res) => {
 // Creating a route to add (CREATE) new events: POST method
 app.post('/events', async(req, res) => {
     const { eventName, date, time, location, comment } = req.body         // Data sent in the body of the request
+
+    // Vérifie si eventName est vide
+    if (!eventName || eventName.trim() === '') {
+        return res.status(400).json({ error: "Le nom de l'événement est requis" });
+    }
+    
     try {
         const newEvent = await Event.create({ eventName, date, time, location, comment })
         res.status(201).json(newEvent)
