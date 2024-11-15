@@ -162,7 +162,7 @@ app.delete("/events/:id", async(req, res) => {
         const event = await Event.findByPk(req.params.id);              // Search event by ID
         if (event) {
             await Event.destroy({ where :{id: req.params.id}})          // Delete the event whose ID matches req.params.id (if found)
-            res.status(200).send('Evènement supprimé avec succès')
+            res.status(200).json('Evènement supprimé avec succès')
         } else {
             res.status(404).send('Evènement non trouvé')
         }
