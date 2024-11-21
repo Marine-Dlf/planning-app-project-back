@@ -1,9 +1,11 @@
 const express = require("express")                  // express package import
 const port = process.env.PORT || 5000
 const sequelize = require('./config/database');     // Establishes a connection to the BDD via the Sequelize ORM
-const Event = require('./models/event.js')
+// const Event = require('./models/event.js')
 const User = require('./models/user.js')
 const cors = require('cors');
+const { Event, Type } = require('./models/associations');
+
 
 const app = express()                               // Call the express function to start our server: creating an application
 
@@ -54,6 +56,18 @@ app.get("/events", async(req, res) => {
     }
 });
 
+// Route GET pour récupérer tous les types
+app.get('/types', async (req, res) => {
+    try {
+        const types = await Type.findAll();  // Récupérer tous les types
+        res.status(200).json(types);         // Retourner la liste des types
+    } catch (error) {
+        console.error('Erreur lors de la récupération des types:', error);
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
+});
+
+
 // Retrieving and displaying data from the "users" table in my database
 app.get("/users", async(req, res) => {
     try {
@@ -93,7 +107,7 @@ app.get("/users/:id", async(req, res) => {
 
 // Creating a route to add (CREATE) new events: POST method
 app.post('/events', async(req, res) => {
-    const { eventName, date, time, location, comment } = req.body         // Data sent in the body of the request
+    const { eventName, date, time, location, comment, types_id } = req.body         // Data sent in the body of the request
 
     // Vérifie si eventName est vide
     if (!eventName || eventName.trim() === '') {
@@ -101,11 +115,31 @@ app.post('/events', async(req, res) => {
     }
     
     try {
-        const newEvent = await Event.create({ eventName, date, time, location, comment })
+        const newEvent = await Event.create({ eventName, date, time, location, comment, types_id })
         res.status(201).json(newEvent)
     } catch (error) {
         console.error("Erreur de création :", error);
         res.status(500).send("Erreur serveur"); 
+    }
+})
+
+// Creating a route to add (CREATE) new types: POST method
+app.post('/types', async(req, res) => {
+
+    const { typeName } = req.body
+
+    // Vérifie si eventName est vide
+    if (!typeName || typeName.trim() === '') {
+        return res.status(400).json({ error: "Le nom du type est requis" });
+    }
+
+    try {
+        const newType = await Type.create( { typeName })
+        console.log("Type créé avec succès :", newType);
+        res.status(201).json(newType)
+    } catch (error) {
+        console.log("Erreur de création :", error)
+        res.status(500).send("Erreur serveur")
     }
 })
 
