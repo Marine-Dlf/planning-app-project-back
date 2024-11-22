@@ -172,6 +172,22 @@ app.put('/events/:id', async(req, res) => {
     }
 })
 
+// Creating a route to UPDATE (modify) a type: PUT method
+app.put('/types/:id', async(req, res) => {
+    try {
+        const type = await Type.findByPk(req.params.id)
+        if (type) {
+            await Type.update(req.body, {where :{id: req.params.id}})
+            res.status(200).json(type)
+        } else {
+            res.status(400).send('Type non trouvé')
+        }
+    } catch (error) {
+        console.error("Erreur de mise à jour :", error)
+        res.status(500).send("Erreur serveur")
+    }
+})
+
 // Creating a route to UPDATE (modify) a user: PUT method
 app.put("/users/:id", async(req, res) => {
     try {
