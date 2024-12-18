@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize')
 const sequelize = require('../config/database')
 const Type = require('./type')
 
+
 const Event = sequelize.define('Event', {
     id: {
         type: DataTypes.UUID,
