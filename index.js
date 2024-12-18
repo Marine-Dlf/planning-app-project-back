@@ -1,48 +1,14 @@
 const express = require("express")                  // express package import
 const port = process.env.PORT || 5000
 const sequelize = require('./config/database');     // Establishes a connection to the BDD via the Sequelize ORM
-// const Event = require('./models/event.js')
 const User = require('./models/user.js')
 const cors = require('cors');
 const { Event, Type } = require('./models/associations');
 
 
-const app = express()                               // Call the express function to start our server: creating an application
-
-// Middleware to read json requests
-app.use(express.json())
-
-app.use(cors());
-
-// Creating roads
-app.get("/", (req, res) =>{
-    res.status(200).send("Hello World !")
-})
-
-app.get("/json", (req, res) => {
-    res.status(200).json({
-        id: 1,
-        name: "Bob",
-        age: 40,
-        description: {
-            cheveux: "blond",
-            yeux: "bleu"
-        },
-        nationalité: "française"
-    })
-})
-
-// Defines an HTTP GET route for /databasetest
-app.get("/databasetest", async(req, res) => {
-    console.log("Testing database connection...");
-    try {
-        await sequelize.authenticate();      // Attempts to establish a connection to the database. This returns a promise that will be resolved if the connection is successful.
-        res.status(200).send("Connection has been established successfully.");
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-        res.status(500).send("Unable to connect to the database.");
-    }
-})
+const app = express()       // Call the express function to start our server: creating an application
+app.use(express.json())     // Middleware to read json requests
+app.use(cors());            // Allows requests from other domains
 
 
 // Retrieving and displaying data from the "events" table in my database
@@ -56,7 +22,7 @@ app.get("/events", async(req, res) => {
     }
 });
 
-// Route GET pour récupérer tous les types
+// Route GET to retrieve all types
 app.get('/types', async (req, res) => {
     try {
         const types = await Type.findAll();  // Récupérer tous les types
@@ -66,7 +32,6 @@ app.get('/types', async (req, res) => {
         res.status(500).json({ error: 'Erreur serveur' });
     }
 });
-
 
 // Retrieving and displaying data from the "users" table in my database
 app.get("/users", async(req, res) => {
@@ -108,7 +73,7 @@ app.get("/users/:id", async(req, res) => {
 // Creating a route to add (CREATE) new events: POST method
 app.post('/events', async(req, res) => {
     const { eventName, date, time, location, comment, types_id } = req.body         // Data sent in the body of the request
-
+    console.log('Données reçues pour création d\'événement:', req.body);
     // Vérifie si eventName est vide
     if (!eventName || eventName.trim() === '') {
         return res.status(400).json({ error: "Le nom de l'événement est requis" });
@@ -125,10 +90,9 @@ app.post('/events', async(req, res) => {
 
 // Creating a route to add (CREATE) new types: POST method
 app.post('/types', async(req, res) => {
-
     const { typeName } = req.body
 
-    // Vérifie si eventName est vide
+    // Checks if eventName is empty
     if (!typeName || typeName.trim() === '') {
         return res.status(400).json({ error: "Le nom du type est requis" });
     }
@@ -209,9 +173,9 @@ app.put("/users/:id", async(req, res) => {
 // Creating a route to DELETE an event: DELETE method
 app.delete("/events/:id", async(req, res) => {
     try {
-        const event = await Event.findByPk(req.params.id);              // Search event by ID
+        const event = await Event.findByPk(req.params.id);
         if (event) {
-            await Event.destroy({ where :{id: req.params.id}})          // Delete the event whose ID matches req.params.id (if found)
+            await Event.destroy({ where :{id: req.params.id}})
             res.status(200).json('Evènement supprimé avec succès')
         } else {
             res.status(404).send('Evènement non trouvé')
